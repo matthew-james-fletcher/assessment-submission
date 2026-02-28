@@ -61,9 +61,6 @@ class AssessmentAnswersController extends AbstractController
                 400,
             );
         }
-        // todo create Answer Option repository
-        // todo create assessment question repository
-        // todo check the value does not already exist
         return new JsonResponse('',201);
     }
 }
