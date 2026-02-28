@@ -8,9 +8,17 @@ use Doctrine\ORM\EntityRepository;
 
 class AssessmentAnswerRepository extends EntityRepository
 {
-    public function findAnswersByInstanceAndQuestion(string $instanceId, string $question): array
+    public function findAnswersByInstanceAndQuestion(AssessmentInstance $instance, AssessmentQuestion $question): array
     {
-        //todo implement
-        return [];
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('assessmentAnswer')
+            ->from(AssessmentAnswer::class, 'assessmentAnswer')
+            ->andWhere('assessmentAnswer.assessmentInstance = :instance')
+            ->andWhere('assessmentAnswer.assessmentQuestion = :question')
+            ->setParameter('instance', $instance)
+            ->setParameter('question', $question);
+
+        return $qb->getQuery()->getResult();
     }
 }
