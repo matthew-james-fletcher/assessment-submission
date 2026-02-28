@@ -36,7 +36,7 @@ class AssessmentAnswersController extends AbstractController
 
         if (!$instanceId || !$questionId || !$answerOptionId) {
             return new JsonResponse(
-                ['error' => 'instance_id '+ $instanceId +', question_id, answer_option_id are required for this request'],
+                ['error' => 'instance_id, question_id, answer_option_id are required for this request'],
                 400,
             );
         }
