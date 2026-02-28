@@ -27,29 +27,29 @@ class AssessmentAnswerService
         $answerOption = null;
         if ($question->getQuestionType() == 'Likert') {
             if (!$answerOptionId) {
-                // todo throw error here
+                throw new InvalidArgumentException('answer option must be given when question type is "Likert"');
             }
             $answerOption = $this->assessmentAnswerOptionRepository->findAnswerOptionById($answerOptionId);
             if (!$answerOption) {
-                // todo throw error here
+                throw new InvalidArgumentException('answer option is not found');
             }
         }
         if ($question->getIsReflection() && !$textAnswer) {
-            // todo throw error here
+            throw new InvalidArgumentException('when question is type "reflection" text answer must be given');
         }
         $previousUserAnswers = $this->assessmentAnswerRepository->findAnswersByInstanceAndQuestion(
-            $instance->getId(),
-            $question->getId()
-        )
+            $instance,
+            $question,
+        );
         if (!empty($previousUserAnswers)) {
-            // todo throw error here
+            throw new LogicException('this answer already exists');
         }
         // note this could be made into a sql statement as that may be faster, but this is more readable.
         $assessmentQuestion = $instance->getAssessmentQuestion();
         $assessment = $assessmentQuestion->getAssessment();
         $questionsAssessments = $question->getAssessments();
         if (!in_array($assessment, $questionsAssessments)) {
-            // todo throw error
+            throw new InvalidArgumentException('you cannot create an answer for a question that is not included on the assessment');
         }
         $answer = new AssessmentAnswer();
         $answer->setAssessmentInstance($instance);
