@@ -32,10 +32,9 @@ class AssessmentAnswerService
         ?string $numberValue,
     ): AssessmentAnswer {
         $answerOption = null;
-
-        if ($question->getQuestionType() === 'Likert') {
+        if ($question->getQuestionType() === 'likert') {
             if (!$answerOptionId) {
-                throw new InvalidArgumentException('answer option must be given when question type is "Likert"');
+                throw new InvalidArgumentException('answer option must be given when question type is "likert"');
             }
 
             $answerOption = $this->assessmentAnswerOptionRepository->findAnswerOptionById($answerOptionId);
@@ -78,6 +77,6 @@ class AssessmentAnswerService
 
         $this->entityManager->persist($answer);
         $this->entityManager->flush();
-        return $answer
+        return $answer;
     }
 }
