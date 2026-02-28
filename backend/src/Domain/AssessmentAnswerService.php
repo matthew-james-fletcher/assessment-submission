@@ -24,8 +24,6 @@ class AssessmentAnswerService
         ?string $textAnswer,
         ?string $numberValue,
     ) {
-        // todo add data to database
-        // todo add check for question to belong to assessment
         $answerOption = null;
         if ($question->getQuestionType() == 'Likert') {
             if (!$answerOptionId) {
@@ -53,5 +51,14 @@ class AssessmentAnswerService
         if (!in_array($assessment, $questionsAssessments)) {
             // todo throw error
         }
+        $answer = new AssessmentAnswer();
+        $answer->setAssessmentInstance($instance);
+        $answer->setQuestion($question);
+        $answer->setAnswerOption($answerOption);
+        $answer->setTextAnswer($textAnswer);
+        $answer->setNumberValue($numberValue);
+
+        //$entityManager->persist($answer);
+        //$entityManager->flush();
     }
 }
