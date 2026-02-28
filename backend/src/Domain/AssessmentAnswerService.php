@@ -41,6 +41,12 @@ class AssessmentAnswerService
         if ($question->getIsReflection() && !$textAnswer) {
             // todo throw error here
         }
-
+        $previousUserAnswers = $this->assessmentAnswerRepository->findAnswersByInstanceAndQuestion(
+            $instance->getId(),
+            $question->getId()
+        )
+        if (!empty($previousUserAnswers)) {
+            // todo throw error here
+        }
     }
 }
