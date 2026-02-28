@@ -141,7 +141,9 @@ class AssessmentService
 
                     $elementTotalScore += $answerOption->getValue();
                     $totalScore += $answerOption->getValue();
-                    $elementAnsweredQuestions++;
+                    if ($questionMaxScore > 0) {
+                        $elementAnsweredQuestions++;
+                    }
                 }
 
                 $elementQuestionAnswersData[] = $questionData;
