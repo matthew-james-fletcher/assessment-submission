@@ -99,6 +99,7 @@ class AssessmentService
             $elementTotalScore = 0;
             $elementMaxScore = 0;
             $elementAnsweredQuestions = 0;
+            $elementAnsweredQuestionsWithPoints = 0;
             $elementQuestionAnswersData = [];
 
             foreach ($elementQuestions as $question) {
@@ -141,8 +142,9 @@ class AssessmentService
 
                     $elementTotalScore += $answerOption->getValue();
                     $totalScore += $answerOption->getValue();
+                    $elementAnsweredQuestions++;
                     if ($questionMaxScore > 0) {
-                        $elementAnsweredQuestions++;
+                        $elementAnsweredQuestionsWithPoints++;
                     }
                 }
 
@@ -155,8 +157,8 @@ class AssessmentService
                 ? round(($elementAnsweredQuestions / count($elementQuestions)) * 100, 2)
                 : 0;
             // Normalize 1-5 scale to 0-100% scale
-            $normalizedElementScore = $elementAnsweredQuestions > 0 ? ($elementTotalScore - $elementAnsweredQuestions) : 0;
-            $normalizedElementMaxScore = $elementAnsweredQuestions > 0 ? ($elementMaxScore - $elementAnsweredQuestions) : 0;
+            $normalizedElementScore = $elementAnsweredQuestionsWithPoints > 0 ? ($elementTotalScore - $elementAnsweredQuestionsWithPoints) : 0;
+            $normalizedElementMaxScore = $elementAnsweredQuestionsWithPoints > 0 ? ($elementMaxScore - $elementAnsweredQuestionsWithPoints) : 0;
             $elementScorePercentage = $normalizedElementMaxScore > 0
                 ? round(($normalizedElementScore / $normalizedElementMaxScore) * 100, 2)
                 : 0;
