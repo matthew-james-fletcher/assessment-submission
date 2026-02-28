@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Assessment;
 
+use App\Domain\AssessmentInstanceRepository;
+use App\Domain\AssessmentAnswerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,11 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 class AssessmentAnswersController extends AbstractController
 {
     private AssessmentAnswerService $assessmentAnswerService;
+    private AssessmentInstanceRepository $assessmentInstanceRepository;
 
     public function __construct(
-        AssessmentAnswerService $assessmentAnswerService
+        AssessmentAnswerService $assessmentAnswerService,
+        AssessmentInstanceRepository $assessmentInstanceRepository,
     ) {
         $this->assessmentAnswerService = $assessmentAnswerService;
+        $this->assessmentInstanceRepository = $assessmentInstanceRepository;
     }
 
     /**
@@ -38,10 +43,17 @@ class AssessmentAnswersController extends AbstractController
                 400,
             );
         }
+        $instance = $this->assessmentInstanceRepository->findInstanceById($instanceId);
+        if (!$instance) {
+            return new JsonResponse(
+                ['error' => 'instance_id is invalid'],
+                400,
+            );
+        }
         // todo create Answer Option repository
         // todo create instance repository
         // todo create assessment question repository
         // todo check the value does not already exist
-        return new JsonResponse(201)
+        return new JsonResponse('',201);
     }
 }

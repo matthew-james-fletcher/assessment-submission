@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Table(name="assessment_answer_options")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Domain\AssessmentAnswerOptionRepository")
  */
 class AssessmentAnswerOption
 {
