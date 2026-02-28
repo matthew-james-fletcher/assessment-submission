@@ -24,9 +24,7 @@ class AssessmentAnswerService
         ?string $textAnswer,
         ?string $numberValue,
     ) {
-        // todo add check to see if the value already exists
         // todo add data to database
-        // todo create assessment answers repository to add into database
         // todo add check for question to belong to assessment
         $answerOption = null;
         if ($question->getQuestionType() == 'Likert') {
@@ -47,6 +45,13 @@ class AssessmentAnswerService
         )
         if (!empty($previousUserAnswers)) {
             // todo throw error here
+        }
+        // note this could be made into a sql statement as that may be faster, but this is more readable.
+        $assessmentQuestion = $instance->getAssessmentQuestion();
+        $assessment = $assessmentQuestion->getAssessment();
+        $questionsAssessments = $question->getAssessments();
+        if (!in_array($assessment, $questionsAssessments)) {
+            // todo throw error
         }
     }
 }
