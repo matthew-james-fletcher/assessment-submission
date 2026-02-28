@@ -50,17 +50,24 @@ class AssessmentAnswersController extends AbstractController
         $instance = $this->assessmentInstanceRepository->findInstanceById($instanceId);
         if (!$instance) {
             return new JsonResponse(
-                ['error' => 'instance_id is invalid'],
+                ['error' => 'instance given does not exist'],
                 400,
             );
         }
-        $question = $this->assessmentQuestionRepository->findQuestionById($instanceId);
-        if (!$instance) {
+        $question = $this->assessmentQuestionRepository->findQuestionById($questionId);
+        if (!$question) {
             return new JsonResponse(
-                ['error' => 'instance_id is invalid'],
+                ['error' => 'question given does not exist'],
                 400,
             );
         }
-        return new JsonResponse('',201);
+        $this->assessmentAnswerService->createInstancedAnswer(
+            $instance,
+            $question,
+            $answerOptionId,
+            $textAnswer,
+            $numberValue,
+        );
+        return new JsonResponse('Created',201);
     }
 }
