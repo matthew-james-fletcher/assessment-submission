@@ -12,16 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AssessmentAnswersController extends AbstractController
 {
-
-    private AssessmentRepository $assessmentRepository;
-    private AssessmentService $assessmentService;
+    private AssessmentAnswerService $assessmentAnswerService;
 
     public function __construct(
-        AssessmentRepository $assessmentRepository,
-        AssessmentService $assessmentService
+        AssessmentAnswerService $assessmentAnswerService
     ) {
-        $this->assessmentRepository = $assessmentRepository;
-        $this->assessmentService = $assessmentService;
+        $this->assessmentAnswerService = $assessmentAnswerService;
     }
 
     /**
@@ -33,18 +29,19 @@ class AssessmentAnswersController extends AbstractController
         $instanceId = $data['instance_id'] ?? null;
         $questionId = $data['question_id'] ?? null;
         $answerOptionId = $data['answer_option_id'] ?? null;
+        $textAnswer = $data['text_answer'] ?? null;
+        $numberValue = $data['number_value'] ?? null;
 
-        if (!$instanceId || !$questionId || !$answerOptionId) {
+        if (!$instanceId || !$questionId) {
             return new JsonResponse(
-                ['error' => 'instance_id, question_id, answer_option_id are required for this request'],
+                ['error' => 'instance_id, question_id are required for this request'],
                 400,
             );
         }
-        // todo create the new service for handling the answers
-        // todo check to see if all values given exist
+        // todo create Answer Option repository
+        // todo create instance repository
+        // todo create assessment question repository
         // todo check the value does not already exist
-        // todo add the new entity to database / persist to database
-        // todo update the response json to 201 or error if required
-        return $this->json("");
+        return new JsonResponse(201)
     }
 }
