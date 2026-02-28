@@ -26,6 +26,11 @@ services:
         arguments:
             - 'App\Domain\AssessmentAnswerOption'
 
+    App\Domain\AssessmentAnswerRepository:
+        class: App\Domain\AssessmentAnswerRepository
+        factory: [ '@doctrine.orm.default_entity_manager', 'getRepository' ]
+        arguments:
+            - 'App\Domain\AssessmentAnswer'
 
     App\Domain\AssessmentInstanceRepository:
         class: App\Domain\AssessmentInstanceRepository
@@ -46,3 +51,4 @@ services:
     App\Domain\AssessmentAnswerService:
         arguments:
             - '@App\Domain\AssessmentAnswerOptionRepository'
+            - '@App\Domain\AssessmentAnswerRepository'

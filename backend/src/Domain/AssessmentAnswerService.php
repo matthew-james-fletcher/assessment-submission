@@ -7,11 +7,14 @@ namespace App\Domain;
 class AssessmentAnswerService
 {
     private AssessmentAnswerOptionRepository $assessmentAnswerOptionRepository;
+    private AssessmentAnswerRepository $assessmentAnswerRepository;
     public function __construct(
         AssessmentAnswerOptionRepository $assessmentAnswerOptionRepository,
+        AssessmentAnswerRepository $assessmentAnswerRepository,
     )
     {
         $this->assessmentAnswerOptionRepository = $assessmentAnswerOptionRepository;
+        $this->assessmentAnswerRepository = $assessmentAnswerRepository;
     }
 
     public function createInstancedAnswer(
@@ -38,5 +41,6 @@ class AssessmentAnswerService
         if ($question->getIsReflection() && !$textAnswer) {
             // todo throw error here
         }
+
     }
 }
