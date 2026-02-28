@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use InvalidArgumentException;
+use LogicException;
 
 class AssessmentAnswersController extends AbstractController
 {
@@ -61,13 +63,25 @@ class AssessmentAnswersController extends AbstractController
                 400,
             );
         }
-        $this->assessmentAnswerService->createInstancedAnswer(
-            $instance,
-            $question,
-            $answerOptionId,
-            $textAnswer,
-            $numberValue,
-        );
+        try {
+            $this->assessmentAnswerService->createInstancedAnswer(
+                $instance,
+                $question,
+                $answerOptionId,
+                $textAnswer,
+                $numberValue,
+            );
+        } catch (InvalidArgumentException $e) {
+            return new JsonResponse(
+                ['error' => $e->getMessage()],
+                400
+            );
+        } catch (LogicException $e) {
+            return new JsonResponse(
+                ['error' => $e->getMessage()],
+                409
+            );
+        }
         return new JsonResponse('Created',201);
     }
 }

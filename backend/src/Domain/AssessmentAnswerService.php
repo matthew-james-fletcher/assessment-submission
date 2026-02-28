@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use InvalidArgumentException;
+use LogicException;
+
 class AssessmentAnswerService
 {
     private AssessmentAnswerOptionRepository $assessmentAnswerOptionRepository;
@@ -45,18 +48,19 @@ class AssessmentAnswerService
             throw new LogicException('this answer already exists');
         }
         // note this could be made into a sql statement as that may be faster, but this is more readable.
-        $assessmentQuestion = $instance->getAssessmentQuestion();
-        $assessment = $assessmentQuestion->getAssessment();
-        $questionsAssessments = $question->getAssessments();
-        if (!in_array($assessment, $questionsAssessments)) {
+        $assessmentSession = $instance->getSession();
+        $assessment = $assessmentSession->getAssessment();
+        $questionsAssessments = $question->getAssessments() ?? [];
+        if (!in_array($assessment, $questionsAssessments->toArray())) {
             throw new InvalidArgumentException('you cannot create an answer for a question that is not included on the assessment');
         }
-        $answer = new AssessmentAnswer();
-        $answer->setAssessmentInstance($instance);
-        $answer->setQuestion($question);
-        $answer->setAnswerOption($answerOption);
-        $answer->setTextAnswer($textAnswer);
-        $answer->setNumberValue($numberValue);
+        $answer = new AssessmentAnswer(
+            null,
+            $instance,
+            $answerOption,
+            $textAnswer,
+            $numberValue,
+        );
 
         //$entityManager->persist($answer);
         //$entityManager->flush();
