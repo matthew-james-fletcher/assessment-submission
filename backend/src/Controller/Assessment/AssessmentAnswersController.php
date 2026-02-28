@@ -29,9 +29,6 @@ class AssessmentAnswersController extends AbstractController
      */
     public function __invoke(Request $request): JsonResponse
     {
-        //$instanceId = $request->getContent()->get('instance_id') ?? null;
-        //$questionId = $request->request->get('question_id') ?? null;
-        //$answerOptionId = $request->request->get('answer_option_id') ?? null;
         $data = json_decode($request->getContent(), true);
         $instanceId = $data['instance_id'] ?? null;
         $questionId = $data['question_id'] ?? null;
@@ -43,7 +40,6 @@ class AssessmentAnswersController extends AbstractController
                 400,
             );
         }
-        $instance =
         // todo create the new service for handling the answers
         // todo check to see if all values given exist
         // todo check the value does not already exist
