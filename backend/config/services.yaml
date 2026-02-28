@@ -33,6 +33,12 @@ services:
         arguments:
             - 'App\Domain\AssessmentInstance'
 
+    App\Domain\AssessmentQuestionRepository:
+        class: App\Domain\AssessmentQuestionRepository
+        factory: [ '@doctrine.orm.default_entity_manager', 'getRepository' ]
+        arguments:
+            - 'App\Domain\AssessmentQuestion'
+
     App\Domain\AssessmentService:
         arguments:
             - '@App\Domain\AssessmentRepository'

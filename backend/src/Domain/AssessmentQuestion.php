@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Table(name="assessment_questions")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Domain\AssessmentQuestionRepository")
  */
 class AssessmentQuestion
 {
