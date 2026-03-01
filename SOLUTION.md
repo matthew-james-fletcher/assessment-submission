@@ -1,8 +1,6 @@
 # SOLUTIONS
 
-## Tasks
-
-### ERD Diagram
+## Phase 1: ERD Diagram
 ![img.png](img.png)
 
 The entities keep track of questions and answers for a user as they complete assessments. 
@@ -11,7 +9,7 @@ the system then gives the test maker a selection of answer types either one of a
 
 The answer the test taker gives is stored in assessment answer entity.
 
-### Understand Scoring
+## Phase 2: Understand Scoring
 
 started by setting up postman on my device and reading through the response for d1111111-1111-1111-1111-111111111111
 
@@ -96,7 +94,7 @@ I could add a check and add the minimum value for the current percentage (1) if 
 However, I feel as if this is incorrect to do.
 
 
-## Answers endpoint
+## Phase 3: Answers endpoint
 
 ### overview
 
@@ -252,7 +250,7 @@ So, I have added the code in for now but not sending it up because it is not in 
 }
 ```
 
-### Additional work
+## Phase 4: Additional work
 
 created the update endpoint to allow users to change their answers, but they must keep the answer to the same question
 they previously answered. Some of the data that was required before is no longer required, for my tests locally I
