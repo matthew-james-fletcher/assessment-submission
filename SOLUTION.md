@@ -3,11 +3,35 @@
 ## Phase 1: ERD Diagram
 ![img.png](img.png)
 
-The entities keep track of questions and answers for a user as they complete assessments. 
-The user takes an invitation token and takes part in an assessment where they are given a selection of questions, 
-the system then gives the test maker a selection of answer types either one of a given options or text or a number.
+The entities are:
 
-The answer the test taker gives is stored in assessment answer entity.
+assessment (Primary Key: id) <br>
+assessment_questions (Primary Key: id) <br>
+assessment_answer_options (Primary Key: id, Foreign Keys: [assessment_quesion_id]) <br>
+assessment_session (Primary Key: id, Foreign Keys: [assessment_id]) <br>
+assessment_instance (Primary Key: id, Foreign Keys: [session_id]) <br>
+assessment_answers (Primary Key: id, Foreign Keys: [assessment_instance_id, assessment_answer_option_id]) <br>
+
+They have the following relationships:
+
+assessment (N : M) assessment_questions <br>
+assessment (1 : N) assessment_session <br>
+assessment_questions (1 : N) assessment_answer_options <br>
+assessment_answer_option (1 : N) assessment_answers <br>
+assessment_session (1 : N) assessment_instance <br>
+assessment_instance (1 : N) assessment_answers <br>
+
+assessment and assessment_questions have a many-to-many relationship by using the assessments_questions table to
+keep the data correctly structured.
+
+assessment_answer_options and assessment_answers have and optional 1 : N relationship meaning an assessment answer
+can exist without a connected assessment_answer_option. 
+
+### Overall Structure
+
+we have assessments which have questions (these questions can be on multiple assessments), the questions have options
+that are connected with different values given for each one, someone a part of a session can answer the question with
+an answer which is then stored against there session / instance.
 
 ## Phase 2: Understand Scoring
 
