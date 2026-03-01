@@ -122,6 +122,9 @@ some repositories in controllers others in service layer: The way I was taught c
 as possible only doing basic checks (if item exists), as to reduce the clutter when codebases get larger. Therfore,
 I have only kept simple logic checks for if the question / instance exists.
 
+returning the object: In previous systems I have worked on we send back data about the item we have created / updated.
+So, I have added the code in for now but not sending it up because it is not in the requirements
+
 
 ### Test result
 
@@ -175,6 +178,136 @@ I have only kept simple logic checks for if the question / instance exists.
                     "numeric_value": null,
                     "answer_explanation": null,
                     "option_number": 4
+                },
+                {
+                    "question_id": "a2222222-2222-2222-2222-222222222222",
+                    "question_title": "How often do you use formative assessment strategies?",
+                    "question_suite": null,
+                    "question_sequence": 2,
+                    "is_reflection": false,
+                    "reflection_prompt": null,
+                    "element": "1.1",
+                    "max_score": 5,
+                    "is_answered": true,
+                    "answer_id": "e2222222-2222-2222-2222-222222222222",
+                    "answer_value": 5,
+                    "answer_text": "Always",
+                    "answer_option_id": "b2222222-2222-2222-2222-222222222225",
+                    "text_answer": null,
+                    "numeric_value": null,
+                    "answer_explanation": null,
+                    "option_number": 5
+                },
+                {
+                    "question_id": "a3333333-3333-3333-3333-333333333333",
+                    "question_title": "To what extent do you differentiate instruction for diverse learners?",
+                    "question_suite": null,
+                    "question_sequence": 3,
+                    "is_reflection": false,
+                    "reflection_prompt": null,
+                    "element": "1.1",
+                    "max_score": 5,
+                    "is_answered": true,
+                    "answer_id": "c60e6848-dfc7-4a42-8f68-a4a49d5244a1",
+                    "answer_value": 3,
+                    "answer_text": "To some extent",
+                    "answer_option_id": "b3333333-3333-3333-3333-333333333333",
+                    "text_answer": null,
+                    "numeric_value": null,
+                    "answer_explanation": null,
+                    "option_number": 3
+                },
+                {
+                    "question_id": "a4444444-4444-4444-4444-444444444444",
+                    "question_title": "Reflection",
+                    "question_suite": null,
+                    "question_sequence": 4,
+                    "is_reflection": true,
+                    "reflection_prompt": "What is one area you would like to develop further in your teaching practice?",
+                    "element": "1.1",
+                    "max_score": 0,
+                    "is_answered": false,
+                    "answer_id": null,
+                    "answer_value": null,
+                    "answer_text": null,
+                    "answer_option_id": null,
+                    "text_answer": null,
+                    "numeric_value": null
+                }
+            ]
+        }
+    },
+    "insights": [
+        {
+            "type": "completion",
+            "message": "You have 1 questions remaining to complete this assessment.",
+            "positive": false
+        },
+        {
+            "type": "performance",
+            "message": "You demonstrate strong confidence in this element of teaching practice.",
+            "positive": true
+        }
+    ]
+}
+```
+
+### Additional work
+
+created the update endpoint to allow users to change their answers, but they must keep the answer to the same question
+they previously answered. Some of the data that was required before is no longer required, for my tests locally I
+changed the 4 points the user gave previously to 5 below is the test responses.
+
+```
+{
+    "instance": {
+        "id": "d1111111-1111-1111-1111-111111111111",
+        "created_at": "2026-02-28 15:18:03",
+        "updated_at": "2026-02-28 15:18:03",
+        "completed": false,
+        "completed_at": null,
+        "responder_name": "Test Teacher",
+        "element": "1.1"
+    },
+    "total_questions": 4,
+    "answered_questions": 3,
+    "completion_percentage": 75,
+    "scores": {
+        "element": "1.1",
+        "total_score": 13,
+        "max_score": 15,
+        "percentage": 83.33
+    },
+    "element_scores": {
+        "1.1": {
+            "element": "1.1",
+            "total_questions": 4,
+            "answered_questions": 3,
+            "completion_percentage": 75,
+            "scores": {
+                "total_score": 13,
+                "max_score": 15,
+                "percentage": 83.33
+            },
+            "question_answers": [
+                {
+                    "question_id": "a1111111-1111-1111-1111-111111111111",
+                    "question_title": "How confident are you in planning engaging lessons?",
+                    "question_suite": null,
+                    "question_sequence": 1,
+                    "is_reflection": false,
+                    "reflection_prompt": null,
+                    "element": "1.1",
+                    "max_score": 5,
+                    "is_answered": true,
+                    "answer_id": "e1111111-1111-1111-1111-111111111111",
+                    "answer_value": 5,
+                    "answer_text": "Extremely confident",
+                    "answer_option_id": "b1111111-1111-1111-1111-111111111115",
+                    "text_answer": null,
+                    "numeric_value": null,
+                    "answer_explanation": null,
+                    "option_number": 5
                 },
                 {
                     "question_id": "a2222222-2222-2222-2222-222222222222",

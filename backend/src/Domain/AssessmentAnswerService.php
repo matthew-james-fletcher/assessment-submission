@@ -79,4 +79,39 @@ class AssessmentAnswerService
         $this->entityManager->flush();
         return $answer;
     }
+
+    public function updateInstancedAnswer(
+        AssessmentAnswer $answer,
+        ?string $answerOptionId,
+        ?string $textAnswer,
+        ?string $numberValue,
+    ): AssessmentAnswer {
+        if (!$answer->getAssessmentAnswerOption() && !$answerOptionId) {
+            throw new InvalidArgumentException(
+                'Cannot change answer option to null if answerOptionId already exists'
+            );
+        }
+        $answerOption = null;
+        if ($answerOptionId) {
+            $answerOption = $this->assessmentAnswerOptionRepository->findAnswerOptionById($answerOptionId);
+            if (!$answerOption) {
+                throw new InvalidArgumentException('The answer option given does not exist');
+            }
+            if (
+                $answerOption->getAssessmentQuestion()->getId() !=
+                $answer->getAssessmentAnswerOption()->getAssessmentQuestion()->getId()
+            ) {
+                throw new InvalidArgumentException('Cannot change the question for the answer');
+            }
+            if ($answerOption->getAssessmentQuestion()->getIsReflection() && !$textAnswer) {
+                throw new InvalidArgumentException('when question is type "reflection" text answer must be given');
+            }
+        }
+        $answer->setAssessmentAnswerOption($answerOption);
+        $answer->setTextAnswer($textAnswer);
+        $answer->setNumericValue($numberValue);
+        $this->entityManager->persist($answer);
+        $this->entityManager->flush();
+        return $answer;
+    }
 }
