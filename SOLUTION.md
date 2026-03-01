@@ -35,9 +35,10 @@ an answer which is then stored against there session / instance.
 
 ## Phase 2: Understand Scoring
 
-started by setting up postman on my device and reading through the response for d1111111-1111-1111-1111-111111111111
+### Testing process
 
-The current percentage given for the element is 53.85 as described in the Phase 2 document. (obtained by using postman)
+using postman I sent a get request to http://localhost:8002/api/assessment/results/d1111111-1111-1111-1111-111111111111
+which responded with the following response.
 
 ```
 {
@@ -107,15 +108,29 @@ The current percentage given for the element is 53.85 as described in the Phase 
     ]
 }
 ```
-The normalised percentage is the current percentage of the test taking into account the fact the minimum score is 1.
-Therefore, to get a correct percentage you would need to -1 from all the answers to give the correct percentage.
 
-However, there is a bug with the current system. In the event of the assessment being completed the 4th question 
-would still be added to the elementAddedQuestion and therefore the percentage given back would become wrong.
-So, I am adding an if statement to check if the question is worth points.
+The percentage responded back with the expected 53.85%. However, at first this seemed weird to me the user has so far
+scored 9/15 points available. Therefore, if they score 0 points for there final question they should still get 60% marks.
+So I looked at the calculation again <code> (total_score - answered) / (max_score - answered) * 100 </code> and realised
+what answered was in for. For a given question the minimum value a user can get is 1. So even if the test taker gets
+every question wrong the minimum they can get is 20%, so to "normalize" this we deduct 1 for each question the user has
+answered.
 
-I could add a check and add the minimum value for the current percentage (1) if the question has not been answered.
-However, I feel as if this is incorrect to do.
+The normalisation algorithm accounts for the minimum baseline a user will get just for answering the question (1 mark)
+giving a more accurate representation of how they did.
+
+
+### Bugs found
+
+Looking through the code (and the hint given in the task readme) I noticed the current implementation does not take into
+account if the question is a reflection and does not score the user any points. The system adds to the answered variable
+even if the question does not give points. <p>
+
+To solve this I added <code>$elementAnsweredQuestionsWithPoints</code> this keeps track of the number of answered
+questions the user has given that scored points. (I used points over is reflection as I believe this is more future-proof
+if functionality changes and reflections can score points then I won't need to change the code.) I used this value 
+instead of <code>elementAnsweredQuestions</code> so I could keep track of number of questions answered for the completion
+percentage and keep an accurate normalised percentage.
 
 
 ## Phase 3: Answers endpoint
