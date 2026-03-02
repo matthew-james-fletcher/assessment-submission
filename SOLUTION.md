@@ -1,4 +1,23 @@
-# SOLUTIONS
+# SOLUTION - [Matthew Fletcher]
+
+## Task Completed
+[Full-Stack]
+
+## Time Spent
+
+Phase 1: 20 min
+Phase 2: 45 min
+Phase 3 ( +duplication checker ): 3h
+Phase 4: 45min
+SOLUTION file: 1.5h
+
+Total ~6h
+
+## Approach
+
+My general approach is always to write a little bit of code then test it. With phase 3 this meant starting with the 
+controller seeing if symfony connected up the controller to the route and then adding on more to it, adding the 
+checks before adding the persisting entities as I didn't want to clutter up the database.
 
 ## Phase 1: ERD Diagram
 ![img.png](img.png)
@@ -633,7 +652,24 @@ I checked to see if it persisted and below is shows the percentage has been upda
 }
 ```
 
-# Resources used
+# Challenges and solutions
+
+Most of the challenges I faced where due to my current environment, as I did not have full access to my main laptop over
+the weekend, so I started this project without having integrated AI systems to help with the creation of outline or have
+access to the ide's ability to highlight incorrect code.
+
+Another Issue I had was with creating the duplication check, the original solution I had for checking the duplication did
+not work as I had written the assessment answer as I had difficulties converting my created SQL statement into the
+query builder format. I was able to solve this by utilising AI to change my sql into the symfony version.
+
+# Changes I would make
+
+I would spend more time on setting up my environment, getting AI systems integrated so it could create the controller +
+Services for me. The time taken for the 
+
+If I had more time I would have added unit tests for the controller and for the service.
+
+# Tools & Libraries used
 
  - [lucid chart](https://lucid.app/lucidchart/91bdae77-6576-4076-84f1-56741071f269/edit?beaconFlowId=6ACFC8B2839F36AA&invitationId=inv_581de3b8-b586-4c44-99f2-c6885d20bc34&page=0_0#)
  - Postman 
