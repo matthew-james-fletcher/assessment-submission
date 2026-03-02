@@ -135,36 +135,219 @@ percentage and keep an accurate normalised percentage.
 
 ## Phase 3: Answers endpoint
 
-### overview
+### Implementation approach
 
-My task list for this project was first planning it out mentally, then starting with what I can see / what will be 
-displayed. I created the controller first, making a template out and testing to see if it responded correctly. Then 
-moved onto the new service, I created a basic outline of this as well and connected it up to the controller requiring
-minor changes to the services.yaml file. Then I created the new repositories for each of the entities I would be
-Interacting with. I then spent time connecting them up into the services and controller. I then spent some time debugging
-realising my implementation for the if item exists already was incorrect so spent time fixing this. Then lastly
-added the entity management.
+I chose to go for an outward in approach, starting with the controller and moving towards the database testing my additions
+as I add to the codebase. Therefore,the tests I did are relative to the point of the code I was implementing at the time.
 
-I then spent some additional time bugfixing because I wrote "likert" as "Linkert".
+### Test cases descriptions (Overview)
+1. Instance and Question are given
+2. Instance not given
+3. Question not given
+4. Instance does not exist in database
+5. Question does not exist in database
+6. when Question Type is 'likert' and valid option id is given
+7. when Question Type is 'likert' option ID not given
+8. when Question Type is 'likert' option id is not valid
+9. when Question Type is not 'likert' and option id is given
+10. question is a reflection and text is given
+11. question is a reflection and text not given
+12. instance given does exist for a given question
+13. instance does not exist for a given question
+14. item persists in database
 
-Overall my strategy was to work from what i could see on postman 
-(at the moment my ability to debug is limited by my setup)
+### Edge case tests:
 
-### explanations for choices
+2,3,4,5,7,8,9,11,13
 
-repositories for each entity: this is I believe the better option over continuing the original repository because it is
-more readable for humans in addition for allowing symfony to utilise it's caching capabilities.
+#### 1: Instance and Question are given
 
-some repositories in controllers others in service layer: The way I was taught controllers should be kept as simple
-as possible only doing basic checks (if item exists), as to reduce the clutter when codebases get larger. Therfore,
-I have only kept simple logic checks for if the question / instance exists.
+##### Data sent
+```
+{
+  "instance_id": "d1111111-1111-1111-1111-111111111111",
+  "question_id": "a3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+(this test was done before following code checking for option id was implemented )
+201 <code> Created </code>
 
-returning the object: In previous systems I have worked on we send back data about the item we have created / updated.
-So, I have added the code in for now but not sending it up because it is not in the requirements
+#### 2: Instance not given
 
+##### Data sent
+```
+{
+  "question_id": "a3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
 
-### Test result
+400 <code> error: instance_id, question_id are required for this request </code>
 
+#### 3: Question not given
+
+##### Data sent
+```
+{
+  "instance_id": "d1111111-1111-1111-1111-111111111111"
+}
+```
+##### Response
+
+400 <code> error: instance_id, question_id are required for this request </code>
+
+#### 4: Instance does not exist in database
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-3456-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+404 <code> error: instance given does not exist </code>
+
+#### 5: Question does not exist in database
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3456-3333-333333333333"
+}
+```
+##### Response
+
+404 <code> error: question given does not exist </code>
+
+#### 6: when Question Type is 'likert' and valid option id is given
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333",
+    "answer_option_id": "b3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+201 <code> Created </code>
+
+#### 7: when Question Type is 'likert' option ID not given
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+400 <code> error: answer option must be given when question type is "likert" </code>
+
+#### 8: when Question Type is 'likert' option id is not valid
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333",
+    "answer_option_id": "b3333333-3333-3333-3456-333333333333"
+}
+```
+##### Response
+
+404 <code> error: answer option is not found </code>
+
+#### 9: when Question Type is not 'likert' and option id is given
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a4444444-4444-4444-4444-444444444444",
+    "answer_option_id": "b3333333-3333-3333-3456-333333333333"
+}
+```
+##### Response
+
+400 <code> error: question type is not "likert" so option id should not be given </code>
+
+#### 10: question is a reflection and text is given
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a4444444-4444-4444-4444-444444444444",
+    "text_answer": "Text
+}
+```
+##### Response
+
+201 <code> Created </code>
+
+#### 11: question is a reflection and text not given
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a4444444-4444-4444-4444-444444444444",
+}
+```
+##### Response
+
+400 <code> error: when question is type "reflection" text answer must be given </code>
+
+#### 12: instance does belong to question
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333",
+    "answer_option_id": "b3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+201 <code> Created </code>
+
+#### 13: instance does not belong to question
+(this required me adding the instance to the database to test the functionality)
+##### Data sent
+```
+{
+    "instance_id": "d1111111-4567-4567-4567-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333",
+    "answer_option_id": "b3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+400 <code> error: you cannot create an answer for a question that is not included on the assessment </code>
+
+#### 14: item persists in database
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333",
+    "answer_option_id": "b3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+201 <code> Created </code>
+
+I also tested it remained by sending a POST REQUEST to http://localhost:8002/api/assessment/results/d1111111-1111-1111-1111-111111111111
 ```
 {
     "instance": {
@@ -291,9 +474,40 @@ So, I have added the code in for now but not sending it up because it is not in 
 
 ## Phase 4: Additional work
 
-created the update endpoint to allow users to change their answers, but they must keep the answer to the same question
-they previously answered. Some of the data that was required before is no longer required, for my tests locally I
-changed the 4 points the user gave previously to 5 below is the test responses.
+### Duplication Check
+Added duplication check into the AssessmentAnswerService 
+
+#### check for duplicate gives error
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a3333333-3333-3333-3333-333333333333",
+    "answer_option_id": "b3333333-3333-3333-3333-333333333333"
+}
+```
+##### Response
+
+404 <code> error: this answer already exists </code>
+
+### PUT Endpoint
+
+For my tests locally I changed the 4 points the user gave previously to 5 below is the test responses.
+
+##### Data sent
+```
+{
+    "instance_id": "d1111111-1111-1111-1111-111111111111",
+    "question_id": "a2222222-2222-2222-2222-222222222222",
+    "answer_option_id": "b2222222-2222-2222-2222-222222222225"
+}
+```
+##### Response
+
+400 <code> Updated </code>
+
+I checked to see if it persisted and below is shows the percentage has been updated
 
 ```
 {
@@ -419,8 +633,8 @@ changed the 4 points the user gave previously to 5 below is the test responses.
 }
 ```
 
-## Resources used
+# Resources used
 
  - [lucid chart](https://lucid.app/lucidchart/91bdae77-6576-4076-84f1-56741071f269/edit?beaconFlowId=6ACFC8B2839F36AA&invitationId=inv_581de3b8-b586-4c44-99f2-c6885d20bc34&page=0_0#)
- - Postman
- - chat GPT (used mostly for the Assessment sql as on my current system I don't have everything setup)
+ - Postman 
+ - ChatGPT (not integrated with ide)

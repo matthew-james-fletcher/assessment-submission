@@ -40,8 +40,10 @@ class AssessmentAnswerService
             $answerOption = $this->assessmentAnswerOptionRepository->findAnswerOptionById($answerOptionId);
 
             if (!$answerOption) {
-                throw new InvalidArgumentException('answer option is not found');
+                throw new LogicException('answer option is not found');
             }
+        } else if ($answerOptionId) {
+            throw new InvalidArgumentException('question type is not "likert" so option id should not be given');
         }
 
         if ($question->getIsReflection() && !$textAnswer) {
